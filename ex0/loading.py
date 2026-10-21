@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import importlib
-from types import ModuleType
 
 REAGENTS: dict[str, str] = {
     "pandas": "Data manipulation ready",
@@ -9,12 +8,12 @@ REAGENTS: dict[str, str] = {
 }
 
 
-def load_reagent(name: str) -> ModuleType | None:
+def load_reagent(name: str) -> str | None:
     try:
         reagent = importlib.import_module(name)
-        return reagent
     except ImportError:
         return None
+    return str(reagent.__version__)
 
 
 def main() -> None:
@@ -23,9 +22,9 @@ def main() -> None:
 
     is_missing = False
     for module, info in REAGENTS.items():
-        reagent = load_reagent(module)
-        if reagent is not None:
-            print(f"[OK] {module} ({reagent.__version__}) - {info}")
+        version = load_reagent(module)
+        if version is not None:
+            print(f"[OK] {module} ({version}) - {info}")
         else:
             print(f"[MISSING] {module}")
             is_missing = True
